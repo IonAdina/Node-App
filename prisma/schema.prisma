@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:1234@localhost:5432/nodejs"
+}
+model Motocicleta {
+  id    String    @id @default(uuid())
+  marca String 
+  an Int 
+  creare DateTime @default(now())
+  editare DateTime @updatedAt
+  idInchiriere String
+  inchiriere Inchirieri @relation(fields: [idInchiriere], references: [id], onDelete: Cascade)
+  @@index([idInchiriere])
+}
+
+model Inchirieri{
+  id    String    @id @default(uuid())
+  perioada String
+  pret_inchiriere Float 
+  idClient String 
+  client Client @relation(fields: [idClient], references: [id], onDelete: Cascade)
+  @@index([idClient])
+  motocicleta Motocicleta[]
+}
+
+model Client{
+  id    String    @id @default(uuid())
+  nume String
+  CNP String   @unique
+  inchirieri Inchirieri[]
+}
+
+
+
+
+
+
+
